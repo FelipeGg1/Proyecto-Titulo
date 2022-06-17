@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/css/perfil.css' %}">
+
+    <script src="{% static 'core/js/scripts.js' %}"></script> 
+    <script src="{% static 'core/js/jquery.min.js' %}"></script> 
+    <link href="{% static 'core/css/templatemo-style.css' %}" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+
+    
+    {% include 'core/nav.html'%}
+<!-- Fin nav -->
+
+<!-- Comienzo Pyme -->
+<main>
+    <header class="row">
+        <div class="row justify-content-fa-pull-left">
+                <!-- Portfolio Item 1-->
+            <div class="col-10">
+                <div class="col-md-9 row cont_prod">
+                    <img src="{{user.imagen.url}}" class="col-5">
+                    
+                    <div class="col-7">
+                        <h3>Usuario: {{user.username}}</h3>
+                        <h3>Nombre: {{user.first_name}}</h3>
+                        <h3>Mail: {{user.email}}</h3>
+                        <h3>Numero: {{user.numero_contac}}</h3>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        
+        {%if user.tipo_user == 'pyme' %}
+        <div class="tm-paging-links">
+            <nav>
+                <ul>
+                    <li class="tm-paging-item"><a href="#" class="tm-paging-link active">Productos</a></li>
+                    <li class="tm-paging-item"><a href="#" class="tm-paging-link">Empleos</a></li>
+                    <li class="tm-paging-item"><a href="#" class="tm-paging-link">Tiendas</a></li>
+                    <li class="tm-paging-item"><a href="#" class="tm-paging-link">Trabajadores</a></li>
+                    <li class="tm-paging-item"><a href="#" class="tm-paging-link">tabla_solicitudes</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Gallery -->
+        <div class="row tm-gallery d-flex justify-content-center">
+            <!-- gallery page 1 -->
+            <div id="tm-gallery-page-productos" class="tm-gallery-page">
+                {% for p in prods %}
+                    <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item px-3">
+                        <a href="{% url 'modificar_producto' p.id_producto %}" class="fas fa-edit" style="cursor: pointer;"></a>
+                        <a type="button" class="btn-close" aria-label="Close" onclick="confirmarEliminacion({{p.post_ptr_id}},'post')"></a>
+                        <figure>
+                            <img src="{{ p.imagen.url}}" alt="Image" class="img-fluid tm-gallery-img" />
+                            <figcaption class="text-center">
+                                <h4 class="tm-gallery-title"><a href="{% url 'producto' p.id_producto %}">{{p.nombre}}</a></h4>
+                                <p class="tm-gallery-description">{{ p.descripcion}}</p>
+                                <p class="tm-gallery-price">{{ p.stock}}</p>
+                                <p class="tm-gallery-price">{{ p.tipo_producto}}</p>
+                            </figcaption>
+                        </figure>
+                    </article>
+                {% endfor %}
+            </div> <!-- gallery page 1 -->
+            
+            <!-- gallery page 2 -->
+            <div id="tm-gallery-page-empleos" class="tm-gallery-page hidden">
+                {% for p in emps %}
+                    <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item px-3">
+                        <a href="{% url 'modificar_empleo' p.id_oferta %}" class="fas fa-edit" style="cursor: pointer;"></a>
+                        <a type="button" class="btn-close" aria-label="Close" onclick="confirmarEliminacion({{p.post_ptr_id}},'post')"></a>
+                        <figure>
+                            <img src="{% get_media_prefix %}suitcase.png" alt="Image" class="img-fluid tm-gallery-img" />
+                            <figcaption class="text-center">
+                                <h4 class="tm-gallery-title"><a href="{% url 'empleo' p.id_oferta %}">{{p.Nombre_ofer}}</a></h4>
+                                <p class="tm-gallery-description">{{ p.descripcion}}</p>
+                                <p class="tm-gallery-price">${{ p.pago}}</p>
+                            </figcaption>
+                        </figure>
+                    </article>
+                {% endfor %}
+            </div> <!-- gallery page 2 -->
+
+            <!-- gallery page 3 -->
+            <div id="tm-gallery-page-tiendas" class="tm-gallery-page hidden">
+                {% for p in tiends %}
+                    <article class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item px-3">
+                        <a href="{% url 'modificar_tienda' p.id_tienda %}" class="fas fa-edit" style="cursor: pointer;"></a>
+                        <a type="button" class="btn-close" aria-label="Close" onclick="confirmarEliminacion({{p.id_tienda}},'tiend')"></a>
+                        <figure>
+                            <img src="{{ p.imagen.url}}" alt="Image" class="img-fluid tm-gallery-img" />
+                            <figcaption class="text-center">
+                                <h4 class="tm-gallery-title"><a href="#">{{p.direccion}}</a></h4>
+                                <p class="tm-gallery-description">{{ p.numero_contac}}</p>
+                                
+                            </figcaption>
+                        </figure>
+                    </article>
+                {% endfor %}
+            </div> <!-- gallery page 3 -->
+
+            <!-- gallery page 4 -->
+            <div id="tm-gallery-page-trabajadores" class="tm-gallery-page hidden">
+               <table class="table table-striped">
+        <thead class="thead">
+            <tr>    
+                <th>No</th>
+                <th>Nombre de usuario</th>
+                <th>Last_login</th>
+                <th>first_name</th>
+                <th>last_name</th>
+                <th>Email</th>
+                <th>Creacion</th>
+                <th>Numero_contac</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in trabajs %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{p.username}}</td>
+                <td>{{p.last_login}}</td>
+                <td>{{p.first_name}}</td>
+                <td>{{p.last_name}}</td>
+                <td>{{p.email}}</td>
+                <td>{{p.date_joined}}</td>
+                <td>{{p.numero_contac}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+            </div> <!-- gallery page 4 -->
+
+
+            <!-- gallery page 4 -->
+            <div id="tm-gallery-page-tabla_solicitudes" class="tm-gallery-page hidden">
+                
+                <table class="table table-striped"> 
+                    <thead class="thead">
+                        <tr>    
+                            <th>Nombre Oferta</th>
+                            <th>Pago</th>
+                            <th>Username</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Numero</th>
+                        </tr>
+                        
+                    </thead>
+                    {% for p in solicit %}
+                    <tbody>
+                    <tr>
+                        <td>{{ p.1 }}</td>
+                        <td>{{ p.2 }} </td>
+                        <td>{{ p.3 }}</td>
+                        <td>{{ p.4 }}</td>
+                        <td>{{ p.5 }}</td>
+                        <td>{{ p.6 }}</td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+
+            </div> <!-- gallery page 4 -->
+            
+            
+            
+        </div>
+        
+    </main>
+    
+    <footer class="tm-footer text-center">
+        <p>Copyright &copy; 2022
+        
+        | Proyecto de Titulo</a></p>
+    </footer>
+<!-- Termino Pyme -->
+
+
+      <!--  -->
+    
+    <a type="button" class="fas fa-box backtostart " data-bs-toggle="modal" data-bs-target="#staticBackdrop"></a>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Agregar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">  
+                        <table>
+                        {{ formprod.as_table }}
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Agregar Producto">
+                
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a type="button" class="fas fa-file backtostart2 " data-bs-toggle="modal" data-bs-target="#staticBackdrop2"></a>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Agregar Oferta de Empleo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form  method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                    <table>
+                    {{ formofer.as_table }}
+                    </table>
+                    
+                
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-primary" value="Agregar Oferta">
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!--  -->
+    <a type="button" class="fas fa-store backtostart3 " data-bs-toggle="modal" data-bs-target="#staticBackdrop3"></a>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Agregar Tienda</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">  
+                        <table>
+                        {{ formtiend.as_table }}
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Agregar Tienda">
+                
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <a type="button" class="fas fa-user-plus backtostart4 " data-bs-toggle="modal" data-bs-target="#staticBackdrop4"></a>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop4" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Agregar Trabajador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">  
+                        <table>
+                        {{ formtrabaj.as_table }}
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Agregar Trabajador">
+                
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a type="button" class="fas fa-file-download backtostart5 " href="{% url 'export-pdf' %}" target="_blank"></a>
+    {% endif %}
+	</div>
+	<script src="js/jquery.min.js"></script>
+	
+	<script>
+		$(document).ready(function(){
+			// Handle click on paging links
+			$('.tm-paging-link').click(function(e){
+				e.preventDefault();
+				
+				var page = $(this).text().toLowerCase();
+				$('.tm-gallery-page').addClass('hidden');
+				$('#tm-gallery-page-' + page).removeClass('hidden');
+				$('.tm-paging-link').removeClass('active');
+				$(this).addClass("active");
+			});
+		});
+	</script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

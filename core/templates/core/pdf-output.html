@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>PDF Output</title>
+    <style>
+
+@page{
+    size: "A4";
+    margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+
+    @top-center{
+        content: element(header);
+    }
+    @bottom-right{
+        content: "Page " counter(page) " of " counter(pages);
+    }
+    
+}
+    </style>
+    <style type="text/css">
+        header  {
+                /* position: running(header); */
+                position: fixed;
+                width: 100%;
+                top: -2cm;
+                }
+        .logo   {
+            position: fixed;
+            top: -2cm;
+
+                }
+        table { page-break-inside:auto }
+        tr    { page-break-inside:avoid; page-break-after:auto }
+        .prods {page-break-after: always;}
+     </style>
+
+</head>
+<body>
+    
+    <header style="text-align: center;">
+        <h1>Reporte de Pyme</h1>
+    </header>
+    <img src="{% get_media_prefix %}warehouse.svg" alt="Image" class="img-fluid tm-gallery-img logo" style="height: 80px;"/>
+    <h2 style="text-align: center;">Lista de Productos Posteados</h2>
+    <div class="text-center">
+    </div>
+    <table class="table table-striped">
+        <thead class="thead">
+            <tr>
+                <th>No</th>
+                <th>Nro Visitas</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Stock</th>
+                <th>Tipo de Producto</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in prods %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{p.nr_visita}}</td>
+                <td>{{p.nombre}}</td>
+                <td>{{p.descripcion}}</td>
+                <td>{{p.stock}}</td>
+                <td>{{p.tipo_producto}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="prods"><a >Total Visitas de Productos: {{prodtotal}}</a></div>
+    
+    <!--  -->
+    <h2 style="text-align: center;">Lista de Empleos Posteados</h2>
+    <table class="table table-striped">
+        <thead class="thead">
+            <tr>
+                <th>No</th>
+                <th>Nro Visitas</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for e in emps %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{e.nr_visita}}</td>
+                <td>{{e.Nombre_ofer}}</td>
+                <td>{{e.descripcion}}</td>
+                <td>${{e.pago}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="prods"><a >Total Visitas de Empleos: {{emptotal}}</a></div>
+    
+</body>
+</html>

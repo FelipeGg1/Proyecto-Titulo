@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../static/core/css/prod_emp.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+
+    <title>Producto</title>
+    <!--{% load static %} -->
+    <link rel="stylesheet" href="{% static 'core/css/index.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" />    
+    <script src="{% static 'core/js/scripts.js' %}"></script> 
+	<link href="{% static 'core/css/styles.css' %}" rel="stylesheet" />
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Third navbar example">
+    <div class="container-fluid">
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample03">
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Mi perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  >Bienvenid@&nbsp{{user.username}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "logout" %}">logout</a>
+          </li>
+        </ul>
+      
+      </div>
+    </div>
+  </nav>
+<!-- Fin nav -->
+    
+    <!-- Portfolio Section-->
+    <section class="page-section productos" id="productos">
+      <div class="container">
+          <!-- Button trigger modal -->
+      {%if user.tipo_user == 'encargado' %}
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Reporte
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Reporte Publicacion</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form  method="post" >
+                {% csrf_token %}
+                <div class="modal-body">  
+                    <table>
+                    {{ form.as_table }}
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                <input type="submit" class="btn btn-primary" value="Reportar">
+            </form>
+                </div>
+        </div>
+        </div>
+    </div>
+    {% endif %}
+      <!-- Modal -->
+
+
+          <!-- Portfolio Section Heading-->
+          <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">{{prod.nombre}}</h2>
+          <!-- Icon Divider-->
+          <div class="divider-custom">
+              <div class="divider-custom-line"></div>
+              <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+              <div class="divider-custom-line"></div>
+          </div>
+
+          <section>
+            <div class="row justify-content-center">
+                <!-- Portfolio Item 1-->
+                <div class="col-10">
+                <div class="col-md-9 row cont_prod">
+                <img class= "col-lg-5" src="{{ prod.imagen.url}}" >
+                <div class="col-7" >
+                <h5>
+                <a>{{prod.nombre}}</a> &nbsp
+                <br>
+                <a>descripcion:</a> &nbsp 
+                <a>{{prod.descripcion}}</a> &nbsp
+                <br>
+                <a>stock:</a> &nbsp
+                <a>{{ prod.stock}}</a> &nbsp
+                <br>
+                <a>tipo de producto:</a> &nbsp
+                <a>{{ prod.tipo_producto}}</a> <br>
+                <a>Pyme:</a>&nbsp
+                <a href="{% url 'perfil_pyme' prod.user_id %}">{{ prod.user.username}}</a>
+                </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>  
+ 
+
+<script src="{% static 'core/js/jquery.min.js' %}"></script> 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

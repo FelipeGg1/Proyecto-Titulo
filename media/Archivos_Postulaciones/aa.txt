@@ -1,0 +1,60 @@
+def reg_post(request):#imagen
+    if request.method == "POST" :
+        tnombre = request.POST['nombre']
+        tdescripcion = request.POST['descripcion']
+        timagen = request.POST['imagen']
+        tstock = request.POST['stock']
+        ttipo_producto = request.POST['tipo_producto']
+        #Hacer la insert SQL
+        cursor = connection.cursor()
+        tuserid = request.user.id
+        query1 = ''' 
+                
+                insert into core_post (id_user_id)values (%s);
+
+                 '''
+        query2 = ''' 
+                insert into core_producto (nombre,
+                                    imagen,
+                                    descripcion,
+                                    stock,
+                                    tipo_producto,
+                                    id_post_id) 
+
+                                    values (%s,%s,%s,%s,%s,(select max(id_post)
+                                    from core_post 
+                                    where id_user_id= %s 
+                                    ORDER BY id_post)
+                                    );
+        '''
+        cursor.execute(query1, [tuserid])
+        cursor.execute(query2, [tnombre,timagen,tdescripcion,tstock,ttipo_producto,tuserid])
+        transaction.commit()
+        return HttpResponse(tuserid)
+        
+    return render(request,'core/reg_post.html')
+
+
+
+def reg_post(request):#imagen
+    if request.method == "POST" and request.FILES:
+        tuserid = request.user.id
+        #Hacer la insert SQL
+
+
+        Producto.id_post = Post.objects.raw ('''select max(id_post)
+                                    from core_post 
+                                    where id_user_id= %s 
+                                    ORDER BY id_post
+                                    ;''', [tuserid])
+
+        Producto.nombre = request.POST['nombre']
+        Producto.descripcion = request.POST['descripcion']
+        Producto.imagen = request.FILES['imagen']
+        Producto.stock = request.POST['stock']
+        Producto.tipo_producto = request.POST['tipo_producto']
+        Producto.save_base(force_update=True)
+
+        return HttpResponse(tuserid)
+        
+    return render(request,'core/reg_post.html')

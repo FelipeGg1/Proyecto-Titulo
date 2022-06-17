@@ -1,0 +1,41 @@
+<h2>Total de productos {{empcount}}</h2>
+<h3>Pagina {{pageEmp.number}}</h3>
+<section id="Empleos">
+    <div class="filaimg">
+        <div class="d-flex flex-wrap align-content-start">
+            {% for p in pageEmp.object_list %}
+                <div class="filares" >
+                    
+                    <br>
+                    <a>nombre:</a> &nbsp
+                    <!-- <a>{{ p.Nombre_ofer}}</a> &nbsp -->
+                    <a href="{% url 'empleo' p.id_oferta %}">{{p.Nombre_ofer}}</a> &nbsp                    
+                    <br>
+                    <a>descripcion:</a> &nbsp
+                    <a>{{ p.descripcion}}</a> &nbsp
+                    <br>
+                    <a>Pago:</a> &nbsp
+                    <a>{{ p.pago}}</a>
+                    <br>
+                </div>
+                
+            {% endfor %}
+        </div>
+        <nav aria-label="Page navigation example"class="d-flex justify-content-center">
+            {% if pageEmp.has_previous %}
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="{% url 'index' %}?pageEmp={{ pageEmp.previous_page_number }}#Empleos">Anterior</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link disabled" role="button" aria-disabled="true">Anterior</a></li>
+            {% endif %}
+            {% if pageEmp.has_next %}
+              <li class="page-item"><a class="page-link" href="{% url 'index' %}?pageEmp={{ pageEmp.next_page_number }}#Empleos">Siguiente</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link disabled" role="button" aria-disabled="true">Siguiente</a></li>
+            {% endif %}
+            </ul>
+          </nav>
+    </div>
+
+    
+</section>

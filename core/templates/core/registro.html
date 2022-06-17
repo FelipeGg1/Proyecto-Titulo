@@ -1,0 +1,34 @@
+
+
+
+{% extends "core/base_creden.html" %}
+
+{% load static %}
+{% block css %}
+<script src="https://kit.fontawesome.com/488764be4d.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{% static 'core/css/estilo_creden.css' %}">
+{% endblock %}
+
+{% block contenido %}
+
+  <!-- Tabs Titles -->
+  
+  <h2 class="inactive underlineHover"><a href="{% url 'login' %}">Iniciar Sesion</a></h2>
+  <h2 class="active"><a href="{% url 'registro' %}">Registro</a> </h2>
+
+  <!-- Icon -->
+  <div class="fadeIn first">
+    <i class="fa fa-solid fa-user fa-2xl"></i>
+  </div>
+  <!--  -->
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+   
+    <input type="submit" value="Registrarme">
+
+{% endblock %}
+
+
